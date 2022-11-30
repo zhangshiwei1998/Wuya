@@ -1,0 +1,307 @@
+<template>
+  <!-- <div ref="nav" class="ui fixed inverted stackable pointing menu" :class="{'transparent':$route.name==='home' && clientSize.clientWidth>768}"> -->
+  <div ref="nav" class="ui inverted stackable pointing menu">
+    <div class="ui container">
+      <router-link to="/">
+        <h3 class="ui header item m-blue">{{ blogName }}</h3>
+      </router-link>
+      <router-link to="/home" class="item" :class="{'m-mobile-hide': mobileHide,'active':$route.name==='home'}">
+        <i class="home icon"></i>首页
+      </router-link>
+      <el-dropdown trigger="click" @command="categoryRoute">
+				<span class="el-dropdown-link item" :class="{'m-mobile-hide': mobileHide,'active':$route.name==='category'}">
+					<i class="idea icon"></i>分类<i class="caret down icon"></i>
+				</span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item :command="category.name" v-for="(category,index) in categoryList" :key="index">{{ category.name }}</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+      <router-link to="/archives" class="item" :class="{'m-mobile-hide': mobileHide,'active':$route.name==='archives'}">
+        <i class="clone icon"></i>归档
+      </router-link>
+      <router-link to="/moments" class="item" :class="{'m-mobile-hide': mobileHide,'active':$route.name==='moments'}">
+        <i class="comment alternate outline icon"></i>动态
+      </router-link>
+      <router-link to="/friends" class="item" :class="{'m-mobile-hide': mobileHide,'active':$route.name==='friends'}">
+        <i class="users icon"></i>友人帐
+      </router-link>
+      <router-link to="/about" class="item" :class="{'m-mobile-hide': mobileHide,'active':$route.name==='about'}">
+        <i class="info icon"></i>关于我
+      </router-link>
+      <el-autocomplete v-model="queryString" :fetch-suggestions="debounceQuery" placeholder="Search..."
+                       class="right item m-search" :class="{'m-mobile-hide': mobileHide}"
+                       popper-class="m-search-item" @select="handleSelect">
+        <i class="search icon el-input__icon" slot="suffix"></i>
+        <template slot-scope="{ item }">
+          <div class="title">{{ item.title }}</div>
+          <span class="content">{{ item.content }}</span>
+        </template>
+      </el-autocomplete>
+      <button class="ui menu black icon button m-right-top m-mobile-show" @click="toggle">
+        <i class="sidebar icon"></i>
+      </button>
+      <div>
+        <div class="ui segments m-box">
+          <div class="ui card">
+            <div class="extra content" align="center">
+              <a :href="introduction.github" v-if="introduction.github" target="_blank" class="ui circular icon button">
+                <svg style="width: 1em!important;height: 1em!important;" t="1588657335874" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6878" width="200" height="200">
+                  <path d="M0 520.886c0-69.368 13.51-135.697 40.498-199.02 26.987-63.323 63.322-117.826 109.006-163.51 45.65-45.65 100.154-81.985 163.51-109.006A502.289 502.289 0 0 1 512 8.92c69.335 0 135.663 13.477 198.986 40.497 63.356 26.988 117.86 63.323 163.51 109.007 45.684 45.65 82.02 100.154 109.006 163.51A502.289 502.289 0 0 1 1024 520.852c0 111.318-32.504 211.472-97.511 300.494-64.975 88.989-148.48 150.825-250.484 185.476-5.351 0-9.348-0.99-11.99-2.973-2.676-1.982-4.196-3.997-4.526-6.012a59.458 59.458 0 0 1-0.495-8.984 7.663 7.663 0 0 1-0.991-3.006v-128.99c0-40.63-14.336-75.314-43.008-103.986 76.667-13.345 134.011-41.819 171.999-85.487 37.987-43.669 57.013-96.52 57.013-158.522 0-58.005-18.663-108.346-56.022-150.99 13.345-42.678 11-87.668-6.97-135.003-18.697-1.322-39.011 1.85-61.01 9.513-22 7.663-38.318 14.831-49.02 21.47-10.637 6.673-20.316 13.016-28.97 19.027-38.68-10.669-81.854-16.02-129.486-16.02-47.7 0-90.509 5.351-128.529 16.02-7.333-5.35-15.855-11.164-25.5-17.507-9.68-6.342-26.493-14.005-50.507-22.99-23.982-9.018-45.65-12.85-65.008-11.495-18.663 47.996-20.645 93.646-5.979 136.984-36.665 42.678-54.998 92.986-54.998 150.99 0 62.002 18.663 114.689 55.99 157.994 37.326 43.339 94.67 72.01 171.998 86.016a142.303 142.303 0 0 0-39.969 70.029c-56.683 13.972-96.355 3.963-119.015-30.06-42.017-61.308-79.674-83.307-113.003-65.965-4.69 4.657-3.997 9.48 1.982 14.501 6.012 4.988 14.996 11.66 27.02 19.985 11.99 8.357 20.976 17.507 26.987 27.515 0.661 1.322 2.51 6.177 5.517 14.502a831.917 831.917 0 0 0 8.985 23.981c2.973 7.663 8.654 16.186 17.011 25.5 8.324 9.349 18.003 17.178 29.003 23.52 11 6.309 26.161 11 45.485 14.006 19.324 2.972 41.323 3.138 65.998 0.495v100.484c0 0.991-0.165 2.643-0.495 5.021-0.33 2.312-0.991 3.964-1.982 4.955-0.991 1.024-2.345 2.015-4.03 3.039a12.52 12.52 0 0 1-6.474 1.486c-2.676 0-6.012-0.33-10.009-0.99-101.343-35.345-183.825-97.182-247.51-185.51C31.842 731.037 0 631.577 0 520.92z" p-id="6879"></path>
+                </svg>
+              </a>
+              <a :href="introduction.qq" v-if="introduction.qq" target="_blank" class="ui circular icon button">
+                <svg style="width: 1em!important;height: 1em!important;" t="1588658755157" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6709" width="200" height="200">
+                  <path d="M511.03745067 986.9408c-85.50293333 0-163.98613333-26.68693333-214.51733334-66.54506667-25.6608 7.1488-58.4864 18.65493333-79.20213333 32.9216-17.7248 12.2016-15.51573333 24.6464-12.32 29.6704 14.02666667 22.06826667 240.62186667 14.09173333 306.03946667 7.21813334v-3.26506667z" fill="#FAAD08" p-id="6710"></path>
+                  <path d="M495.62731733 986.9408c85.5008 0 163.98613333-26.68693333 214.51733334-66.54506667 25.6608 7.1488 58.48533333 18.65493333 79.2032 32.9216 17.72373333 12.2016 15.51253333 24.6464 12.32 29.6704-14.02666667 22.06826667-240.62293333 14.09173333-306.0416 7.21813334v-3.26506667z" fill="#FAAD08" p-id="6711"></path>
+                  <path d="M496.137184 472.0256c140.7296-0.9344 253.5136-27.50186667 291.73013333-37.696 9.1104-2.432 13.984-6.78826667 13.984-6.78826667 0.032-1.25013333 0.57813333-22.3488 0.57813334-33.232C802.42945067 211.02186667 713.733984 26.8512 495.61665067 26.83946667 277.500384 26.8512 188.80065067 211.0208 188.80065067 394.30933333c0 10.8832 0.5504 31.98186667 0.58346666 33.232 0 0 3.9648 4.07573333 11.23093334 6.048 35.2832 9.57866667 150.18986667 37.4816 294.48533333 38.43626667h1.0368z" fill="#000000" p-id="6712"></path>
+                  <path d="M883.50145067 626.96746667c-8.66133333-27.82506667-20.48426667-60.27306667-32.45546667-91.43466667 0 0-6.8864-0.848-10.36586667 0.15786667-107.424 31.152-237.62453333 51.00586667-336.8448 49.808h-1.02613333C404.14465067 586.6848 274.82731733 567.05813333 167.76491733 536.2112 163.67425067 535.03466667 155.59745067 535.53386667 155.59745067 535.53386667 143.62625067 566.6944 131.804384 599.1424 123.14411733 626.96746667 81.84491733 759.64586667 95.22411733 814.5536 105.41291733 815.78453333c21.8624 2.63893333 85.09866667-99.87946667 85.09866667-99.87946666 0 104.17066667 94.21226667 264.1248 309.94773333 265.59573333a765.87733333 765.87733333 0 0 1 5.7248 0C721.92171733 980.02986667 816.130784 820.0768 816.130784 715.90613333c0 0 63.23626667 102.5184 85.10186667 99.87946667 10.18666667-1.23093333 23.56586667-56.13866667-17.7312-188.81813333" fill="#000000" p-id="6713"></path>
+                  <path d="M429.20811733 303.91146667c-29.76 1.32266667-55.19466667-32.11306667-56.78933333-74.61973334-1.6192-42.53546667 21.18186667-78.08746667 50.94826667-79.4176 29.73333333-1.3056 55.14986667 32.11626667 56.76586666 74.63893334 1.6288 42.53546667-21.17653333 78.08-50.9248 79.3984m220.448-74.61973334c-1.5936 42.50666667-27.02933333 75.94026667-56.78933333 74.61973334-29.7472-1.32053333-52.5536-36.86293333-50.9248-79.39733334 1.61386667-42.52586667 27.0304-75.94773333 56.76373333-74.63893333 29.7696 1.33013333 52.57066667 36.88106667 50.95146667 79.41653333" fill="#FFFFFF" p-id="6714"></path>
+                  <path d="M695.40545067 359.0688c-7.8112-18.78293333-86.46613333-39.7088-183.8432-39.7088h-1.04533334c-97.376 0-176.03306667 20.92586667-183.84213333 39.7088a6.66026667 6.66026667 0 0 0-0.57066667 2.672c0 1.3536 0.4192 2.57493333 1.07306667 3.61173333 6.5792 10.416 93.92426667 61.88586667 183.3408 61.88586667h1.04533333c89.41546667 0 176.75733333-51.46666667 183.33973334-61.88373333a6.77546667 6.77546667 0 0 0 1.0688-3.62133334c0-0.9568-0.21333333-1.85173333-0.5664-2.66453333" fill="#FAAD08" p-id="6715"></path>
+                  <path d="M464.67371733 239.33546667c1.344 16.94506667-7.8688 32-20.5504 33.6448-12.7008 1.64693333-24.0736-10.7552-25.42506666-27.70986667-1.32586667-16.95466667 7.87306667-32.00853333 20.53333333-33.64053333 12.72213333-1.65226667 24.11413333 10.76053333 25.44213333 27.7056m77.97013334 8.464c2.70186667-4.39253333 21.1488-27.488 59.328-19.0784 10.02773333 2.208 14.66666667 5.45706667 15.64586666 6.73706666 1.44533333 1.888 1.84106667 4.576 0.37546667 8.19626667-2.90346667 7.17333333-8.89386667 6.97813333-12.2176 5.5744-2.144-0.90666667-28.736-16.94826667-53.232 6.98986667-1.68426667 1.648-4.69866667 2.21226667-7.55733333 0.25813333-2.85653333-1.95626667-4.0384-5.9232-2.3424-8.67733333" fill="#000000" p-id="6716"></path>
+                  <path d="M503.82145067 589.328h-1.03146667c-67.80586667 0.80213333-150.0224-8.00426667-229.6384-23.38133333-6.81706667 38.67946667-10.93333333 87.29386667-7.3984 145.27573333 8.928 146.54293333 97.728 238.65173333 234.79253333 239.99573333H506.11691733c137.06453333-1.344 225.86453333-93.4528 234.79466667-239.99573333 3.53493333-57.98613333-0.58346667-106.60053333-7.40266667-145.2832-79.63093333 15.38453333-161.86133333 24.19626667-229.68746666 23.3888" fill="#FFFFFF" p-id="6717"></path>
+                  <path d="M310.69291733 581.3504v146.63253333s69.28746667 13.552 138.69973334 4.17066667V596.896c-43.97333333-2.4128-91.40053333-7.79093333-138.69973334-15.5456" fill="#EB1C26" p-id="6718"></path>
+                  <path d="M806.50411733 427.2384s-130.112 43.07946667-302.6592 44.30826667h-1.02613333c-172.26346667-1.22346667-302.21653333-44.16106667-302.66026667-44.30826667l-43.5776 114.08213333c108.9984 34.464 244.0928 56.67733333 346.23786667 55.38773334l1.024-0.00213334c102.15253333 1.29706667 237.22666667-20.91733333 346.24-55.3856l-43.57866667-114.08213333z" fill="#EB1C26" p-id="6719"></path>
+                </svg>
+              </a>
+              <a :href="introduction.bilibili" v-if="introduction.bilibili" target="_blank" class="ui circular icon button">
+                <svg style="width: 1em!important;height: 1em!important;" t="1588657033123" class="icon" viewBox="0 0 1129 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4873" width="200" height="200">
+                  <path d="M234.908525 9.656195a80.468288 80.468288 0 0 1 68.398044 0 167.374038 167.374038 0 0 1 41.84351 30.577949l160.936576 140.819503H621.156306L782.092881 40.234144a168.983404 168.983404 0 0 1 41.84351-30.577949 80.468288 80.468288 0 0 1 107.022823 66.788678 80.468288 80.468288 0 0 1-17.703024 53.913753 449.817728 449.817728 0 0 1-35.406046 32.187315 232.553351 232.553351 0 0 1-22.531121 18.507706h100.58536a170.59277 170.59277 0 0 1 118.288383 53.10907A171.397453 171.397453 0 0 1 1128.106519 352.4511v462.692655a325.896565 325.896565 0 0 1-4.023415 70.00741 178.639599 178.639599 0 0 1-80.468288 112.655603 173.006819 173.006819 0 0 1-92.53853 25.749852H212.377404a341.18554 341.18554 0 0 1-72.421459-4.023415 177.834916 177.834916 0 0 1-111.046237-80.468287A172.202136 172.202136 0 0 1 1.550491 846.526387V388.66183A360.497929 360.497929 0 0 1 1.550491 321.873151a177.030233 177.030233 0 0 1 160.936575-143.233552h105.413457c-16.89834-12.070243-31.382632-26.554535-46.671607-39.429461a80.468288 80.468288 0 0 1-25.749852-65.983996A80.468288 80.468288 0 0 1 234.908525 9.656195M216.400819 321.873151a80.468288 80.468288 0 0 0-63.569948 57.937167 108.632188 108.632188 0 0 0 0 30.577949v380.615001a80.468288 80.468288 0 0 0 55.523119 80.468288 106.21814 106.21814 0 0 0 34.601364 5.63278h654.207179a80.468288 80.468288 0 0 0 76.444873-47.47629 112.655603 112.655603 0 0 0 8.046829-53.10907v-354.060465a135.186723 135.186723 0 0 0 0-38.624779 80.468288 80.468288 0 0 0-52.304387-54.718435 129.553943 129.553943 0 0 0-49.890338-7.242146H254.220914a268.764081 268.764081 0 0 0-37.820095 0z m0 0" fill="#20B0E3" p-id="4874"></path>
+                  <path d="M348.368811 447.40368a80.468288 80.468288 0 0 1 55.523118 18.507706 80.468288 80.468288 0 0 1 28.163901 59.546533v80.468287a80.468288 80.468288 0 0 1-16.093658 51.499705 80.468288 80.468288 0 0 1-131.967992-9.656195 104.608774 104.608774 0 0 1-10.460877-54.718436v-80.468287a80.468288 80.468288 0 0 1 70.00741-67.593362z m416.021047 0a80.468288 80.468288 0 0 1 86.101068 75.64019v80.468288a94.147897 94.147897 0 0 1-12.070243 53.10907 80.468288 80.468288 0 0 1-132.772675 0 95.757262 95.757262 0 0 1-12.874926-57.132485v-80.468287a80.468288 80.468288 0 0 1 70.00741-70.812093z m0 0" fill="#20B0E3" p-id="4875"></path>
+                </svg>
+              </a>
+              <a :href="introduction.email" v-if="introduction.email" class="ui circular icon button">
+                <svg style="width: 1em!important;height: 1em!important;" t="1588659775989" class="icon" viewBox="0 0 1365 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="24547" width="200" height="200">
+                  <path d="M684.00064 607.733333L1282.005973 9.728A133.077333 133.077333 0 0 0 1232.00064 0h-1098.666667c-16.938667 0-33.205333 3.2-48.138666 8.938667l598.805333 598.794666z" p-id="24548"></path>
+                  <path d="M684.00064 728.394667l-664.533333-664.533334A132.48 132.48 0 0 0 0.00064 133.333333v757.333334C0.00064 964.266667 59.733973 1024 133.333973 1024h1098.666667c73.6 0 133.333333-59.733333 133.333333-133.333333v-757.333334a133.013333 133.013333 0 0 0-18.528-67.733333L684.00064 728.394667z" p-id="24549"></path>
+                </svg>
+              </a>
+            </div>
+            <div>
+              <el-collapse accordion>
+                <el-collapse-item :title="item.title" :name="index" v-if="item.title" v-for="(item,index) in introduction.favorites" :key="index">
+                  <div>{{ item.content }}</div>
+                </el-collapse-item>
+              </el-collapse>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</template>
+
+<script>
+import {getSearchBlogList} from "@/api/blog";
+import {mapState} from 'vuex'
+
+export default {
+  name: "Nav",
+  props: {
+    blogName: {
+      type: String,
+      required: true
+    },
+    categoryList: {
+      type: Array,
+      required: true
+    },
+  },
+  data() {
+    return {
+      mobileHide: true,
+      queryString: '',
+      queryResult: [],
+      timer: null
+    }
+  },
+  computed: {
+    ...mapState(['clientSize']),
+    ...mapState(['introduction'])
+  },
+  watch: {
+    //路由改变时，收起导航栏
+    '$route.path'() {
+      this.mobileHide = true
+    }
+  },
+  mounted() {
+    //监听页面滚动位置，改变导航栏的显示
+    // window.addEventListener('scroll', () => {
+    // 	//首页且不是移动端
+    // 	if (this.$route.name === 'home' && this.clientSize.clientWidth > 768) {
+    // 		if (window.scrollY > this.clientSize.clientHeight / 2) {
+    // 			this.$refs.nav.classList.remove('transparent')
+    // 		} else {
+    // 			this.$refs.nav.classList.add('transparent')
+    // 		}
+    // 	}
+    // })
+    //监听点击事件，收起导航菜单
+    document.addEventListener('click', (e) => {
+      //遍历冒泡
+      let flag = e.path.some(item => {
+        if (item === this.$refs.nav) return true
+      })
+      //如果导航栏是打开状态，且点击的元素不是Nav的子元素，则收起菜单
+      if (!this.mobileHide && !flag) {
+        this.mobileHide = true
+      }
+    })
+  },
+  methods: {
+    toggle() {
+      this.mobileHide = !this.mobileHide
+    },
+    categoryRoute(name) {
+      this.$router.push(`/category/${name}`)
+    },
+    debounceQuery(queryString, callback) {
+      this.timer && clearTimeout(this.timer)
+      this.timer = setTimeout(() => this.querySearchAsync(queryString, callback), 1000)
+    },
+    querySearchAsync(queryString, callback) {
+      if (queryString == null
+          || queryString.trim() === ''
+          || queryString.indexOf('%') !== -1
+          || queryString.indexOf('_') !== -1
+          || queryString.indexOf('[') !== -1
+          || queryString.indexOf('#') !== -1
+          || queryString.indexOf('*') !== -1
+          || queryString.trim().length > 20) {
+        return
+      }
+      getSearchBlogList(queryString).then(res => {
+        if (res.code === 200) {
+          this.queryResult = res.data
+          if (this.queryResult.length === 0) {
+            this.queryResult.push({title: '无相关搜索结果'})
+          }
+          callback(this.queryResult)
+        }
+      }).catch(() => {
+        this.msgError("请求失败")
+      })
+    },
+    handleSelect(item) {
+      if (item.id) {
+        this.$router.push(`/blog/${item.id}`)
+      }
+    }
+  }
+}
+</script>
+
+<style scoped>
+.ui.circular.icon.button {
+  width: 38px;
+}
+</style>
+<style>
+.ui.fixed.menu .container {
+  /* width: 1400px !important; */
+  margin-left: auto !important;
+  margin-right: auto !important;
+  /* height: 400px !important; */
+}
+
+.ui.menu .container{
+  flex-direction: column;
+  width: 290px;
+}
+
+.ui.menu {
+  transition: .3s ease-out;
+}
+
+.ui.inverted.pointing.menu.transparent {
+  background: transparent !important;
+}
+
+.ui.inverted.pointing.menu.transparent .active.item:after {
+  background: transparent !important;
+  transition: .3s ease-out;
+}
+
+.ui.inverted.pointing.menu.transparent .active.item:hover:after {
+  background: transparent !important;
+}
+
+.el-dropdown-link {
+  outline-style: none !important;
+  outline-color: unset !important;
+  height: 100%;
+  cursor: pointer;
+}
+
+.el-dropdown-menu {
+  margin: 7px 0 0 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: #1b1c1d !important;
+}
+
+.el-dropdown-menu__item {
+  padding: 0 15px !important;
+  color: rgba(255, 255, 255, .9) !important;
+}
+
+.el-dropdown-menu__item:hover {
+  background: rgba(255, 255, 255, .08) !important;
+}
+
+.el-popper .popper__arrow::after {
+  content: none !important;
+}
+
+.popper__arrow {
+  display: none !important;
+}
+
+.m-search {
+  min-width: 220px;
+  padding: 0 !important;
+}
+
+.m-search input {
+  color: rgba(255, 255, 255, .9);;
+  border: 0px !important;
+  background-color: inherit;
+  padding: .67857143em 2.1em .67857143em 1em;
+}
+
+.m-search i {
+  color: rgba(255, 255, 255, .9) !important;
+}
+
+.m-search-item {
+  min-width: 350px !important;
+}
+
+.m-search-item li {
+  line-height: normal !important;
+  padding: 8px 10px !important;
+}
+
+.m-search-item li .title {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.m-search-item li .content {
+  text-overflow: ellipsis;
+  font-size: 12px;
+  color: rgba(0, 0, 0, .70);
+}
+
+.el-collapse-item {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.el-collapse-item .el-collapse-item__content {
+  padding-bottom: 10px;
+}
+</style>
