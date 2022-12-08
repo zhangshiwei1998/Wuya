@@ -114,8 +114,8 @@ footer {
 }
 
 .m-padded-tb-large {
-    padding-top: 2em !important;
-    padding-bottom: 2em !important;
+    padding-top: 1.5em !important;
+    padding-bottom: 1.5em !important;
 }
 
 .m-padded-tb-big {
@@ -224,6 +224,9 @@ footer {
 
 .m-blue {
     color: #48dbfb !important;
+}
+.m-white{
+    color: #fff !important;
 }
 
 .m-scaleup {

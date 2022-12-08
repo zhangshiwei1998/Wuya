@@ -11,5 +11,11 @@
 </script>
 
 <style>
+#app{
+  overflow-y: scroll;
+}
+#app::-webkit-scrollbar {
+  display: none;
+}
 
 </style>
