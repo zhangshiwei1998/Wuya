@@ -26,7 +26,7 @@
 			<img src="/img/paper-plane.png" style="width: 40px;height: 40px;">
 		</el-backtop>
 		<!--底部footer-->
-		<Footer :siteInfo="siteInfo" :badges="badges" :newBlogList="newBlogList"/>
+		<Footer :siteInfo="siteInfo" :badges="badges"/>
 	</div>
 </template>
 
@@ -51,7 +51,6 @@
 				categoryList: [],
 				tagList: [],
 				badges: [],
-				newBlogList: [],
 			}
 		},
 		computed: {
@@ -81,7 +80,6 @@
 					if (res.code === 200) {
 						this.siteInfo = res.data.siteInfo
 						this.badges = res.data.badges
-						this.newBlogList = res.data.newBlogList
 						this.categoryList = res.data.categoryList
 						this.tagList = res.data.tagList
 						this.$store.commit(SAVE_SITE_INFO, this.siteInfo)

@@ -11,44 +11,35 @@
 
       <el-menu
           :default-active="$route.path"
-          class="el-menu-vertical-demo"
+          :class="{'m-mobile-hide': mobileHide}"
           router>
-        <el-menu-item index="/home"  :class="{'m-mobile-hide': mobileHide}">
+        <el-menu-item index="/home"  >
           <i class="el-icon-house"></i>
           <span slot="title">首页</span>
         </el-menu-item>
-        <el-submenu index="/category"  :class="{'m-mobile-hide': mobileHide}">
+        <el-submenu index="/category">
           <template slot="title">
             <i class="el-icon-files"></i>
             <span>分类</span>
           </template>
           <el-menu-item-group class="submenu">
-<!--            <template slot="title">分类</template>-->
             <el-menu-item :index="'/category/' + category.name" v-for="category in categoryList">
               <i class="el-icon-folder"></i>
               <span>{{ category.name }}</span>
             </el-menu-item>
           </el-menu-item-group>
         </el-submenu>
-        <el-menu-item index="/archives"  :class="{'m-mobile-hide': mobileHide}">
+        <el-menu-item index="/archives">
           <i class="el-icon-folder-opened"></i>
           <span slot="title">归档</span>
         </el-menu-item>
-        <el-menu-item index="/moments"  :class="{'m-mobile-hide': mobileHide}">
-          <i class="el-icon-chat-dot-round"></i>
-          <span slot="title">动态</span>
-        </el-menu-item>
-        <el-menu-item index="/friends" :class="{'m-mobile-hide': mobileHide}">
+        <el-menu-item index="/friends">
           <i class="el-icon-user"></i>
           <span slot="title">友链</span>
         </el-menu-item>
-        <el-menu-item index="/about" :class="{'m-mobile-hide': mobileHide}">
+        <el-menu-item index="/about">
           <i class="el-icon-more-outline"></i>
           <span slot="title">关于我</span>
-        </el-menu-item>
-        <el-menu-item index="/search" :class="{'m-mobile-hide': mobileHide}">
-          <i class="el-icon-search"></i>
-          <span slot="title">搜索</span>
         </el-menu-item>
       </el-menu>
 
